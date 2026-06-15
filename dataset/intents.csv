@@ -1,0 +1,139 @@
+text,intent
+hello,greeting
+hi,greeting
+hey,greeting
+good morning,greeting
+good evening,greeting
+good afternoon,greeting
+how are you,greeting
+hello assistant,greeting
+hey assistant,greeting
+nice to meet you,greeting
+greetings,greeting
+hi there,greeting
+
+what is your name,name
+who are you,name
+tell me your name,name
+introduce yourself,name
+what should i call you,name
+your name please,name
+who am i talking to,name
+
+open chrome,open_chrome
+launch chrome,open_chrome
+start chrome,open_chrome
+run chrome,open_chrome
+open google chrome,open_chrome
+launch browser,open_chrome
+start browser,open_chrome
+open internet browser,open_chrome
+
+open calculator,open_calculator
+start calculator,open_calculator
+launch calculator,open_calculator
+run calculator,open_calculator
+open calc,open_calculator
+i need calculator,open_calculator
+show calculator,open_calculator
+
+open notepad,open_notepad
+launch notepad,open_notepad
+start notepad,open_notepad
+run notepad,open_notepad
+open text editor,open_notepad
+show notepad,open_notepad
+open notes,open_notepad
+
+what time is it,time
+tell me the time,time
+current time,time
+show current time,time
+can you tell the time,time
+time now,time
+what is the current time,time
+give me the time,time
+
+what is today's date,date
+tell me today's date,date
+current date,date
+show today's date,date
+what day is today,date
+tell me the current date,date
+today's date please,date
+date today,date
+
+search python,search
+search machine learning,search
+search artificial intelligence,search
+search data science,search
+search deep learning,search
+search neural networks,search
+search streamlit tutorial,search
+search weather today,search
+search latest technology news,search
+search cricket scores,search
+search stock market news,search
+search python projects,search
+search ai voice assistant,search
+search programming tutorials,search
+search software engineering,search
+
+open youtube,open_youtube
+launch youtube,open_youtube
+start youtube,open_youtube
+open youtube website,open_youtube
+go to youtube,open_youtube
+show youtube,open_youtube
+
+open google,open_google
+launch google,open_google
+go to google,open_google
+open google search,open_google
+show google,open_google
+
+open gmail,open_gmail
+launch gmail,open_gmail
+open email,open_gmail
+check gmail,open_gmail
+show gmail,open_gmail
+
+open spotify,open_spotify
+launch spotify,open_spotify
+play spotify,open_spotify
+start spotify,open_spotify
+
+tell me a joke,joke
+make me laugh,joke
+say a joke,joke
+funny joke,joke
+tell something funny,joke
+
+what can you do,help
+show commands,help
+help me,help
+available commands,help
+list commands,help
+show features,help
+
+how are you,status
+are you fine,status
+how is it going,status
+how do you feel,status
+are you working,status
+
+thank you,thanks
+thanks,thanks
+thank you assistant,thanks
+many thanks,thanks
+thanks for your help,thanks
+appreciate your help,thanks
+
+bye,goodbye
+goodbye,goodbye
+exit,goodbye
+quit,goodbye
+see you later,goodbye
+close assistant,goodbye
+stop assistant,goodbye
+shutdown assistant,goodbye

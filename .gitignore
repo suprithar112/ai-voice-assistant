@@ -1,0 +1,13 @@
+venv/
+__pycache__/
+*.pyc
+*.wav
+
+.idea/
+.vscode/
+
+.streamlit/
+
+model/*.pkl
+
+temp.wav
