@@ -1,0 +1,9 @@
+streamlit
+streamlit-mic-recorder
+openai-whisper
+torch
+scikit-learn
+pandas
+numpy
+joblib
+pyttsx3
