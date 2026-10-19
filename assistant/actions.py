@@ -3,8 +3,8 @@ import webbrowser
 import subprocess
 import datetime
 import platform
-import shutil
 import random
+import os
 from urllib.parse import quote_plus
 
 
@@ -36,10 +36,9 @@ def perform_action(intent, text):
                 return "Opening Notepad."
             except OSError:
                 return "Could not open Notepad."
-
         return (
-            "Notepad is a desktop application. "
-            "The cloud app cannot open it on your computer."
+            "Notepad cannot open on your computer from the online cloud app. "
+            "Run the assistant locally on Windows to use this feature."
         )
 
     # Calculator
@@ -50,28 +49,10 @@ def perform_action(intent, text):
                 return "Opening Calculator."
             except OSError:
                 return "Could not open Calculator."
-
-        elif platform.system() == "Darwin":
-            try:
-                subprocess.Popen(["open", "-a", "Calculator"])
-                return "Opening Calculator."
-            except OSError:
-                return "Could not open Calculator."
-
-        else:
-            calculator = shutil.which("gnome-calculator")
-
-            if calculator:
-                try:
-                    subprocess.Popen([calculator])
-                    return "Calculator command executed."
-                except OSError:
-                    pass
-
-            return (
-                "Calculator is unavailable on the cloud server. "
-                "It cannot open Calculator on your personal computer."
-            )
+        return (
+            "Calculator cannot open on your computer from the online cloud app. "
+            "Run the assistant locally on Windows to use this feature."
+        )
 
     # Chrome
     elif intent == "open_chrome":
@@ -82,37 +63,30 @@ def perform_action(intent, text):
             ]
 
             for chrome_path in chrome_paths:
-                if shutil.which(chrome_path) or __import__("os").path.exists(chrome_path):
+                if os.path.exists(chrome_path):
                     try:
                         subprocess.Popen([chrome_path])
                         return "Opening Chrome."
                     except OSError:
                         pass
 
-        # On a hosted app, this opens a URL from the server,
-        # not a browser window on the user's personal computer.
-        webbrowser.open("https://www.google.com")
-        return "Opening Google. The cloud app cannot launch Chrome on your computer."
+        return "Chrome cannot be launched on your computer from the online cloud app."
 
     # YouTube
     elif intent == "open_youtube":
-        webbrowser.open("https://www.youtube.com")
-        return "Opening YouTube."
+        return "YouTube: https://www.youtube.com"
 
     # Google
     elif intent == "open_google":
-        webbrowser.open("https://www.google.com")
-        return "Opening Google."
+        return "Google: https://www.google.com"
 
     # Gmail
     elif intent == "open_gmail":
-        webbrowser.open("https://mail.google.com")
-        return "Opening Gmail."
+        return "Gmail: https://mail.google.com"
 
     # Spotify
     elif intent == "open_spotify":
-        webbrowser.open("https://open.spotify.com")
-        return "Opening Spotify."
+        return "Spotify: https://open.spotify.com"
 
     # Search
     elif intent == "search":
@@ -126,10 +100,12 @@ def perform_action(intent, text):
         if not query:
             query = "Google"
 
-        search_url = "https://www.google.com/search?q=" + quote_plus(query)
-        webbrowser.open(search_url)
+        search_url = (
+            "https://www.google.com/search?q="
+            + quote_plus(query)
+        )
 
-        return f"Searching for {query}."
+        return f"Search Google for {query}: {search_url}"
 
     # Joke
     elif intent == "joke":
@@ -144,9 +120,9 @@ def perform_action(intent, text):
     elif intent == "help":
         return (
             "I can respond to greetings, tell the time and date, "
-            "search Google, open website links, tell jokes, and provide help. "
-            "Desktop apps such as Notepad and Calculator require a local "
-            "Windows environment."
+            "provide website links, search Google, tell jokes, "
+            "and answer simple questions. Desktop applications require "
+            "the assistant to run locally on your computer."
         )
 
     # Status
