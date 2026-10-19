@@ -1,142 +1,109 @@
 
-import webbrowser
-import subprocess
 import datetime
-import platform
 import random
-import os
 from urllib.parse import quote_plus
 
 
-def perform_action(intent, text):
+def perform_action(intent, text=""):
+    """Handle assistant commands safely on Streamlit Cloud and Windows."""
 
     # Greetings
     if intent == "greeting":
-        return "Hello. How can I help you today?"
+        return "Hello! How can I help you today?"
 
-    # Name
+    # Assistant name
     elif intent == "name":
         return "I am your AI Voice Assistant."
 
-    # Time
+    # Current time
     elif intent == "time":
         current = datetime.datetime.now().strftime("%I:%M %p")
-        return f"The current time is {current}"
+        return f"The current time is {current}."
 
-    # Date
+    # Current date
     elif intent == "date":
         today = datetime.datetime.now().strftime("%d %B %Y")
-        return f"Today is {today}"
+        return f"Today is {today}."
 
     # Notepad
     elif intent == "open_notepad":
-        if platform.system() == "Windows":
-            try:
-                subprocess.Popen(["notepad.exe"])
-                return "Opening Notepad."
-            except OSError:
-                return "Could not open Notepad."
         return (
-            "Notepad cannot open on your computer from the online cloud app. "
-            "Run the assistant locally on Windows to use this feature."
+            "Notepad cannot be launched directly from Streamlit Cloud. "
+            "Please open Notepad manually on your computer."
         )
 
     # Calculator
     elif intent == "open_calculator":
-        if platform.system() == "Windows":
-            try:
-                subprocess.Popen(["calc.exe"])
-                return "Opening Calculator."
-            except OSError:
-                return "Could not open Calculator."
         return (
-            "Calculator cannot open on your computer from the online cloud app. "
-            "Run the assistant locally on Windows to use this feature."
+            "Calculator cannot be launched directly from Streamlit Cloud. "
+            "Please open Calculator manually on your computer."
         )
 
-    # Chrome
+    # Chrome / browser
     elif intent == "open_chrome":
-        if platform.system() == "Windows":
-            chrome_paths = [
-                r"C:\Program Files\Google\Chrome\Application\chrome.exe",
-                r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
-            ]
+        return "Open your browser and visit https://www.google.com"
 
-            for chrome_path in chrome_paths:
-                if os.path.exists(chrome_path):
-                    try:
-                        subprocess.Popen([chrome_path])
-                        return "Opening Chrome."
-                    except OSError:
-                        pass
-
-        return "Chrome cannot be launched on your computer from the online cloud app."
-
-    # YouTube
+    # Websites
     elif intent == "open_youtube":
-        return "YouTube: https://www.youtube.com"
+        return "Open YouTube: https://www.youtube.com"
 
-    # Google
     elif intent == "open_google":
-        return "Google: https://www.google.com"
+        return "Open Google: https://www.google.com"
 
-    # Gmail
     elif intent == "open_gmail":
-        return "Gmail: https://mail.google.com"
+        return "Open Gmail: https://mail.google.com"
 
-    # Spotify
     elif intent == "open_spotify":
-        return "Spotify: https://open.spotify.com"
+        return "Open Spotify: https://open.spotify.com"
 
-    # Search
+    # Google search
     elif intent == "search":
-        query = text.lower().strip()
+        query = (text or "").strip()
 
-        for prefix in ("search for ", "search "):
-            if query.startswith(prefix):
+        for prefix in ("search for ", "search ", "find "):
+            if query.lower().startswith(prefix):
                 query = query[len(prefix):].strip()
                 break
 
         if not query:
-            query = "Google"
+            return "Please enter something to search for."
 
         search_url = (
             "https://www.google.com/search?q="
             + quote_plus(query)
         )
-
-        return f"Search Google for {query}: {search_url}"
+        return f"Search Google for '{query}': {search_url}"
 
     # Joke
     elif intent == "joke":
         jokes = [
             "Why do programmers prefer dark mode? Because light attracts bugs.",
             "A SQL query walks into a bar and asks, Can I join you?",
-            "There are 10 kinds of people. Those who understand binary and those who don't."
+            "There are 10 kinds of people: those who understand binary and those who don't."
         ]
         return random.choice(jokes)
 
     # Help
     elif intent == "help":
         return (
-            "I can respond to greetings, tell the time and date, "
-            "provide website links, search Google, tell jokes, "
-            "and answer simple questions. Desktop applications require "
-            "the assistant to run locally on your computer."
+            "I can greet you, tell you the time and date, tell jokes, "
+            "search Google, and provide links to YouTube, Gmail, "
+            "Spotify, and Google. Desktop applications must be opened "
+            "manually when using the cloud version."
         )
 
     # Status
     elif intent == "status":
-        return "I am working and ready to assist you."
+        return "I am running and ready to assist you."
 
     # Thanks
     elif intent == "thanks":
-        return "You are welcome. Happy to help."
+        return "You are welcome! Happy to help."
 
     # Goodbye
     elif intent == "goodbye":
-        return "Goodbye. Have a nice day."
+        return "Goodbye! Have a nice day."
 
-    # Unknown
+    # Unknown command
     else:
         return "Sorry, I did not understand that command."
