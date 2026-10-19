@@ -1,6 +1,11 @@
+
 import webbrowser
 import subprocess
 import datetime
+import platform
+import shutil
+import random
+from urllib.parse import quote_plus
 
 
 def perform_action(intent, text):
@@ -25,87 +30,128 @@ def perform_action(intent, text):
 
     # Notepad
     elif intent == "open_notepad":
-        subprocess.Popen("notepad.exe")
-        return "Opening Notepad"
+        if platform.system() == "Windows":
+            try:
+                subprocess.Popen(["notepad.exe"])
+                return "Opening Notepad."
+            except OSError:
+                return "Could not open Notepad."
+
+        return (
+            "Notepad is a desktop application. "
+            "The cloud app cannot open it on your computer."
+        )
 
     # Calculator
     elif intent == "open_calculator":
-        subprocess.Popen("calc.exe")
-        return "Opening Calculator"
+        if platform.system() == "Windows":
+            try:
+                subprocess.Popen(["calc.exe"])
+                return "Opening Calculator."
+            except OSError:
+                return "Could not open Calculator."
+
+        elif platform.system() == "Darwin":
+            try:
+                subprocess.Popen(["open", "-a", "Calculator"])
+                return "Opening Calculator."
+            except OSError:
+                return "Could not open Calculator."
+
+        else:
+            calculator = shutil.which("gnome-calculator")
+
+            if calculator:
+                try:
+                    subprocess.Popen([calculator])
+                    return "Calculator command executed."
+                except OSError:
+                    pass
+
+            return (
+                "Calculator is unavailable on the cloud server. "
+                "It cannot open Calculator on your personal computer."
+            )
 
     # Chrome
     elif intent == "open_chrome":
-        try:
-            subprocess.Popen(
-                r"C:\Program Files\Google\Chrome\Application\chrome.exe"
-            )
-        except:
-            webbrowser.open("https://www.google.com")
+        if platform.system() == "Windows":
+            chrome_paths = [
+                r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+                r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
+            ]
 
-        return "Opening Chrome"
+            for chrome_path in chrome_paths:
+                if shutil.which(chrome_path) or __import__("os").path.exists(chrome_path):
+                    try:
+                        subprocess.Popen([chrome_path])
+                        return "Opening Chrome."
+                    except OSError:
+                        pass
+
+        # On a hosted app, this opens a URL from the server,
+        # not a browser window on the user's personal computer.
+        webbrowser.open("https://www.google.com")
+        return "Opening Google. The cloud app cannot launch Chrome on your computer."
 
     # YouTube
     elif intent == "open_youtube":
         webbrowser.open("https://www.youtube.com")
-        return "Opening YouTube"
+        return "Opening YouTube."
 
     # Google
     elif intent == "open_google":
         webbrowser.open("https://www.google.com")
-        return "Opening Google"
+        return "Opening Google."
 
     # Gmail
     elif intent == "open_gmail":
         webbrowser.open("https://mail.google.com")
-        return "Opening Gmail"
+        return "Opening Gmail."
 
     # Spotify
     elif intent == "open_spotify":
         webbrowser.open("https://open.spotify.com")
-        return "Opening Spotify"
+        return "Opening Spotify."
 
     # Search
     elif intent == "search":
+        query = text.lower().strip()
 
-        query = text.lower()
+        for prefix in ("search for ", "search "):
+            if query.startswith(prefix):
+                query = query[len(prefix):].strip()
+                break
 
-        query = query.replace("search", "")
-        query = query.replace("for", "")
+        if not query:
+            query = "Google"
 
-        query = query.strip()
+        search_url = "https://www.google.com/search?q=" + quote_plus(query)
+        webbrowser.open(search_url)
 
-        if query == "":
-            query = "google"
-
-        webbrowser.open(
-            f"https://www.google.com/search?q={query}"
-        )
-
-        return f"Searching for {query}"
+        return f"Searching for {query}."
 
     # Joke
     elif intent == "joke":
-
         jokes = [
             "Why do programmers prefer dark mode? Because light attracts bugs.",
             "A SQL query walks into a bar and asks, Can I join you?",
             "There are 10 kinds of people. Those who understand binary and those who don't."
         ]
-
-        import random
         return random.choice(jokes)
 
     # Help
     elif intent == "help":
         return (
-            "I can open Chrome, YouTube, Gmail, Spotify, "
-            "Notepad, Calculator, search Google, tell time and date, "
-            "and answer simple questions."
+            "I can respond to greetings, tell the time and date, "
+            "search Google, open website links, tell jokes, and provide help. "
+            "Desktop apps such as Notepad and Calculator require a local "
+            "Windows environment."
         )
 
     # Status
     elif intent == "status":
-        return "I am working perfectly and ready to assist you."
+        return "I am working and ready to assist you."
 
     # Thanks
     elif intent == "thanks":
