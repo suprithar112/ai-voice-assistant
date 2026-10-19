@@ -1,6 +1,7 @@
+from pathlib import Path
 import joblib
 
-model = joblib.load("model/intent_model.pkl")
+BASE_DIR = Path(__file__).resolve().parent.parent
+MODEL_PATH = BASE_DIR / "model" / "intent_model.pkl"
 
-def predict_intent(text):
-    return model.predict([text])[0]
+model = joblib.load(MODEL_PATH)
